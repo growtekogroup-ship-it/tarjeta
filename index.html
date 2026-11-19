@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#07080b">
+<title>Tarjeta digital Growteko</title>
+<meta name="description" content="Growteko Group · Consultoría tecnológica en Paraguay. SAP y ERP, automatización y desarrollo, talento de TI.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Growteko Group · Tarjeta digital">
+<meta property="og:description" content="Consultoría tecnológica en Paraguay. Guarda nuestro contacto, escríbenos por WhatsApp o síguenos.">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  /* Layout: one liquid-glass card floating on a dark water surface, actions docked under it, integrations whispered from the four corners. */
+  --ink:#07080b;
+  --deep:#10131a;
+  --paper:#fcfaf8;
+  --mist:#9ea3ae;
+  --line:rgba(252,250,248,.13);
+  --signal:#ef4343;
+  --font-display:"DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body:"DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--ink);color:var(--paper);font-family:var(--font-body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+:focus-visible{outline:2px solid rgba(252,250,248,.85);outline-offset:3px}
+
+/* ---------- water + links ---------- */
+#water{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+#links{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.fallback{display:none}
+.no-gl #water{display:none}
+.no-gl .fallback{display:block;position:fixed;inset:0;z-index:0;overflow:hidden;background:radial-gradient(120% 80% at 50% 40%,#121722 0%,var(--ink) 70%)}
+.no-gl .fallback span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);font:800 28vw/1 var(--font-display);letter-spacing:-.05em;color:rgba(252,250,248,.03);white-space:nowrap}
+
+/* ---------- corners ---------- */
+.hud{position:fixed;inset:0;z-index:2;pointer-events:none}
+.corner{position:absolute;display:flex;flex-direction:column;gap:5px;font:500 10px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(252,250,248,.46)}
+.corner::before{content:"";position:absolute;width:12px;height:12px;border:0 solid rgba(252,250,248,.3)}
+.corner.tl{top:calc(14px + env(safe-area-inset-top));left:calc(14px + env(safe-area-inset-left));padding:7px 0 0 7px}
+.corner.tl::before{top:0;left:0;border-top-width:1px;border-left-width:1px}
+.corner.tr{top:calc(14px + env(safe-area-inset-top));right:calc(14px + env(safe-area-inset-right));padding:7px 7px 0 0;align-items:flex-end}
+.corner.tr::before{top:0;right:0;border-top-width:1px;border-right-width:1px}
+.corner.bl{bottom:calc(14px + env(safe-area-inset-bottom));left:calc(14px + env(safe-area-inset-left));padding:0 0 7px 7px}
+.corner.bl::before{bottom:0;left:0;border-bottom-width:1px;border-left-width:1px}
+.corner.br{bottom:calc(14px + env(safe-area-inset-bottom));right:calc(14px + env(safe-area-inset-right));padding:0 7px 7px 0;align-items:flex-end}
+.corner.br::before{bottom:0;right:0;border-bottom-width:1px;border-right-width:1px}
+.corner .k{display:flex;align-items:center;gap:7px;color:rgba(252,250,248,.56)}
+.corner .sub{font-size:9.5px;letter-spacing:.1em;color:rgba(252,250,248,.28);min-height:1em;white-space:nowrap}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--paper);box-shadow:0 0 8px rgba(252,250,248,.7);animation:blink 2.6s ease-in-out infinite}
+.corner.tr .dot{animation-delay:.65s}.corner.bl .dot{animation-delay:1.3s}.corner.br .dot{animation-delay:1.95s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* ---------- stage ---------- */
+.stage{position:relative;z-index:3;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:calc(58px + env(safe-area-inset-top)) 16px calc(60px + env(safe-area-inset-bottom))}
+.card-wrap{position:relative;width:min(100%,392px);height:clamp(400px,calc(100vh - 262px),580px);perspective:1100px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+@supports (height:100dvh){.card-wrap{height:clamp(400px,calc(100dvh - 262px),580px)}}
+
+.card{position:relative;width:100%;height:100%;border-radius:30px;padding:16px 16px 12px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:12px;overflow:hidden;isolation:isolate;will-change:transform;
+  background:linear-gradient(165deg,rgba(30,33,41,.36),rgba(8,9,12,.52));
+  -webkit-backdrop-filter:blur(2px) saturate(150%);backdrop-filter:blur(2px) saturate(150%);
+  box-shadow:0 50px 90px -30px rgba(0,0,0,.78),0 18px 40px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.04)}
+.no-gl .card{background:linear-gradient(165deg,rgba(34,37,45,.62),rgba(10,11,14,.8));-webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%)}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
+  background:conic-gradient(from var(--la,210deg),rgba(255,255,255,.6),rgba(255,255,255,.07) 22%,rgba(255,255,255,.02) 48%,rgba(255,255,255,.26) 70%,rgba(255,255,255,.6));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;mix-blend-mode:screen;
+  background:radial-gradient(460px circle at var(--mx,30%) var(--my,0%),rgba(255,255,255,.12),transparent 46%)}
+.port{position:absolute;width:7px;height:7px;border-radius:50%;border:1px solid rgba(252,250,248,.5);background:rgba(252,250,248,.08);z-index:3;pointer-events:none}
+.port.tl{top:10.5px;left:10.5px}.port.tr{top:10.5px;right:10.5px}.port.bl{bottom:10.5px;left:10.5px}.port.br{bottom:10.5px;right:10.5px}
+.port.ping{animation:ping .7s var(--ease)}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(252,250,248,.6)}100%{box-shadow:0 0 0 10px rgba(252,250,248,0)}}
+
+.progress{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;padding:0 8px;position:relative;z-index:1}
+.progress span{height:2px;border-radius:2px;background:rgba(252,250,248,.14);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--paper);transform-origin:left center;transform:scaleX(0)}
+
+.card-head{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.mark{width:34px;height:34px;flex:none;border-radius:10px;box-shadow:0 0 0 1px rgba(252,250,248,.18),0 6px 16px -6px rgba(0,0,0,.8)}
+.brand b{display:block;font:700 15px/1.1 var(--font-display);letter-spacing:-.02em}
+.brand span{display:block;margin-top:3px;font:400 11.5px/1.2 var(--font-body);color:var(--mist)}
+
+/* ---------- slides ---------- */
+.slides{position:relative;min-height:0;perspective:900px;container-type:size;container-name:slides;z-index:1}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;gap:13px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding:2px 2px 4px;
+  transition:transform .8s var(--ease),opacity .55s var(--ease);backface-visibility:hidden}
+.slide::-webkit-scrollbar{display:none}
+.slide.is-next{transform:translateX(46%) rotateY(58deg) scale(.9);opacity:0;pointer-events:none}
+.slide.is-prev{transform:translateX(-46%) rotateY(-58deg) scale(.9);opacity:0;pointer-events:none}
+.slide.is-active{transform:translateX(calc(var(--drag,0) * 1px)) rotateY(calc(var(--drag,0) * .05deg));opacity:1}
+.dragging .slide{transition:none}
+.no-anim,.no-anim *{transition:none !important}
+.slide > *:not(.numeral){position:relative;z-index:1}
+.rise{transition:opacity .6s var(--ease),transform .75s var(--ease),filter .6s var(--ease);transition-delay:calc(var(--i,0) * 60ms + 140ms)}
+.slide:not(.is-active) .rise{opacity:0;transform:translateY(14px);filter:blur(6px);transition-delay:0s}
+
+.eyebrow{margin:0;display:flex;align-items:center;gap:8px;font:500 10.5px/1.3 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
+.h{margin:0;font:700 clamp(23px,8cqw,31px)/1.04 var(--font-display);letter-spacing:-.035em;text-wrap:balance}
+.lede{margin:0;max-width:38ch;font:400 14px/1.5 var(--font-body);color:rgba(252,250,248,.72)}
+.numeral{position:absolute;right:-6px;top:-14px;z-index:0;pointer-events:none;font:800 150px/1 var(--font-display);letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(252,250,248,.11);transform:translate(calc(var(--px,0) * -1.5px),calc(var(--py,0) * 1.5px))}
+.more{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:9px 0 7px;font:500 12.5px/1 var(--font-body);color:var(--paper);text-decoration:none;border-bottom:1px solid var(--line)}
+.more .ic{width:15px;height:15px}
+.more:hover{border-bottom-color:var(--paper)}
+
+.s-hero{justify-content:space-between}
+.hero-top{display:flex;flex-direction:column;gap:13px}
+.hero-h{margin:0;font:700 clamp(26px,9cqw,35px)/1.02 var(--font-display);letter-spacing:-.04em}
+.rot{display:block;white-space:nowrap;font-size:min(1em,7.6cqw);margin-top:.06em}
+.rot-w{display:inline-block;padding-bottom:.08em;background:linear-gradient(100deg,#8c919d 0%,#fcfaf8 34%,#c9ccd3 55%,#8c919d 82%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5.5s linear infinite;transition:opacity .42s var(--ease),filter .42s var(--ease),transform .42s var(--ease)}
+.rot-w.out{opacity:0;filter:blur(8px);transform:translateY(-.25em)}
+.rot-w.in{transition:none;opacity:0;filter:blur(8px);transform:translateY(.3em)}
+@keyframes shimmer{0%{background-position:120% 0}100%{background-position:-100% 0}}
+.pillars{list-style:none;margin:0;padding:0;display:grid}
+.pillars button{width:100%;display:flex;align-items:center;gap:10px;padding:9px 0;border:0;border-top:1px solid var(--line);background:none;color:var(--paper);font:500 13px/1.2 var(--font-body);text-align:left;cursor:pointer}
+.pillars button span{font:500 10px/1 var(--font-mono);letter-spacing:.1em;color:var(--mist)}
+.pillars .ic{margin-left:auto;width:15px;height:15px;opacity:.45;transition:transform .3s var(--ease),opacity .3s}
+.pillars button:hover .ic{opacity:1;transform:translateX(3px)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding-top:12px;border-top:1px solid var(--line)}
+.stat b{display:block;font:700 26px/1 var(--font-display);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:6px;font:500 9.5px/1.35 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+
+.chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chips li{padding:7px 10px;border-radius:999px;font:500 11.5px/1.1 var(--font-body);color:rgba(252,250,248,.86);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line)}
+
+.sectors{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.sectors li{display:grid;gap:4px;align-content:start;padding-top:9px;border-top:1px solid var(--line)}
+.sectors b{font:600 13px/1.2 var(--font-body);letter-spacing:-.01em}
+.sectors span{font:400 11.5px/1.35 var(--font-body);color:var(--mist)}
+
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:2px;position:relative;counter-reset:st}
+.steps::before{content:"";position:absolute;left:13.5px;top:16px;bottom:16px;width:1px;background:var(--line)}
+.steps li{counter-increment:st;display:grid;grid-template-columns:28px 1fr;column-gap:12px;align-items:start;padding:5px 0;opacity:.5;transition:opacity .45s var(--ease)}
+.steps li::before{content:counter(st,decimal-leading-zero);grid-row:span 2;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;position:relative;z-index:1;font:500 10px/1 var(--font-mono);color:var(--mist);background:#0c0e12;box-shadow:inset 0 0 0 1px var(--line);transition:background .45s,color .45s,box-shadow .45s}
+.steps li.on{opacity:1}
+.steps li.on::before{background:var(--paper);color:#17171c;box-shadow:0 0 0 4px rgba(252,250,248,.08),0 0 18px rgba(252,250,248,.35)}
+.steps b{padding-top:6px;font:600 14px/1.2 var(--font-body)}
+.steps span{font:400 12px/1.4 var(--font-body);color:var(--mist)}
+
+.quote{margin:0;padding-top:12px;border-top:1px solid var(--line)}
+.quote blockquote{margin:0;font:italic 400 15px/1.42 var(--font-body);color:rgba(252,250,248,.9)}
+.quote figcaption{margin-top:8px;font:500 10px/1.2 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+.quote figcaption b{font-weight:500;color:var(--paper)}
+.promise{margin:auto 0 0;padding:10px 12px;border-radius:14px;font:600 13px/1.4 var(--font-body);letter-spacing:-.01em;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line)}
+
+.sig{width:6px;height:6px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal);animation:blink 2s ease-in-out infinite}
+.cta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-radius:16px;background:var(--paper);color:#17171c;text-decoration:none;font:600 14.5px/1 var(--font-body);box-shadow:0 14px 30px -16px rgba(252,250,248,.4);transition:transform .3s var(--ease)}
+.cta:hover{transform:translateY(-2px)}
+.facts{list-style:none;margin:0;padding:0}
+.facts li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid var(--line);font:500 12.5px/1.3 var(--font-body)}
+.facts span{flex:none;font:500 10px/1.3 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mist)}
+.facts b,.facts a{font-weight:500;color:var(--paper);text-align:right;overflow-wrap:anywhere;text-decoration:none}
+.facts a{border-bottom:1px solid var(--line)}
+
+@container slides (max-height: 400px){
+  .pillars{display:none}
+}
+@container slides (max-height: 300px){
+  .slide{gap:10px}
+  .lede{font-size:13px;line-height:1.45}
+  .hero-top{gap:10px}
+  .sectors{gap:9px 12px}
+  .sectors span{display:none}
+  .steps li:not(.on) span{display:none}
+  .quote blockquote{font-size:13.5px}
+  .promise{display:none}
+  .numeral{font-size:120px}
+}
+
+.card-foot{display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.where{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;font:500 11px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+.where b{font-weight:500;color:var(--paper)}
+.where .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav{width:36px;height:36px;flex:none;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--paper);background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);transition:background .25s,transform .25s var(--ease)}
+.nav:hover{background:rgba(255,255,255,.12)}
+.nav:active{transform:scale(.92)}
+.nav .ic{width:17px;height:17px}
+
+/* ---------- dock ---------- */
+.dock{width:min(100%,392px);display:grid;gap:10px}
+.save{position:relative;width:100%;min-height:52px;display:flex;align-items:center;gap:12px;padding:8px 10px 8px 14px;border:0;border-radius:18px;cursor:pointer;overflow:hidden;text-align:left;color:#17171c;background:var(--paper);font:600 15px/1.1 var(--font-body);box-shadow:0 16px 34px -16px rgba(252,250,248,.38),inset 0 -2px 0 rgba(0,0,0,.08);transition:transform .3s var(--ease)}
+.save:hover{transform:translateY(-2px)}
+.save:active{transform:scale(.98)}
+.save .ic{width:22px;height:22px;stroke-width:1.7}
+.save .t{flex:1;display:flex;flex-direction:column;gap:4px}
+.save small{font:500 11.5px/1 var(--font-body);color:#5f5f6a}
+.save .k{padding:7px 9px;border-radius:10px;font:500 10px/1 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--paper);background:#17171c}
+.save::after{content:"";position:absolute;top:-40%;bottom:-40%;left:0;width:28%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-18deg) translateX(-180%);animation:shine 6.5s 2.2s ease-in-out infinite}
+@keyframes shine{0%,76%{transform:skewX(-18deg) translateX(-180%)}100%{transform:skewX(-18deg) translateX(480%)}}
+.links{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.tile{position:relative;min-height:62px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border-radius:16px;color:var(--paper);text-decoration:none;font:500 10.5px/1 var(--font-body);
+  background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.025));-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 0 0 1px rgba(255,255,255,.07),0 12px 24px -16px rgba(0,0,0,.85);transition:transform .35s var(--ease),background .3s}
+.tile:hover{transform:translateY(-3px);background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.04))}
+.tile .glyph{height:20px;display:grid;place-items:center;font:700 19px/1 var(--font-display);letter-spacing:-.04em}
+.pop{animation:pop .55s var(--ease)}
+@keyframes pop{0%{transform:scale(1)}30%{transform:scale(.88)}100%{transform:scale(1)}}
+.hint{margin:0;font:500 9.5px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:rgba(252,250,248,.34);transition:opacity .6s}
+.hint.gone{opacity:0}
+
+/* ---------- vCard sheet ---------- */
+.sheet{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:calc(16px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));perspective:1200px;visibility:hidden;opacity:0;transition:opacity .35s var(--ease),visibility 0s linear .35s}
+.sheet.open{visibility:visible;opacity:1;transition:opacity .35s var(--ease)}
+.sheet-bg{position:absolute;inset:0;background:rgba(4,5,7,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.vcard{position:relative;width:min(100%,392px);max-height:100%;overflow:auto;display:grid;gap:14px;padding:18px;border-radius:26px;
+  background:linear-gradient(165deg,rgba(34,37,45,.74),rgba(10,11,14,.88));-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.08),0 40px 80px -30px rgba(0,0,0,.9);
+  transform-origin:50% 0;transform:translateY(-70px) rotateX(48deg) scale(.9);opacity:0;transition:transform .75s cubic-bezier(.18,1.25,.4,1),opacity .4s var(--ease)}
+.sheet.open .vcard{transform:none;opacity:1}
+.vc-head{display:flex;align-items:center;gap:12px}
+.vc-head .mark{width:46px;height:46px;border-radius:13px}
+.vc-head h3{margin:0;font:700 21px/1.1 var(--font-display);letter-spacing:-.03em}
+.vc-head p{margin:3px 0 0;font:400 12px/1.3 var(--font-body);color:var(--mist)}
+.vc-head .nav{margin-left:auto;align-self:flex-start}
+.vc-status{margin:0;padding:10px 12px;border-radius:14px;font:400 13px/1.45 var(--font-body);color:rgba(252,250,248,.82);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--line)}
+.vc-status b{color:var(--paper);font-weight:600}
+.vc-rows{list-style:none;margin:0;padding:0}
+.vc-rows li{display:grid;grid-template-columns:70px minmax(0,1fr) auto;align-items:center;gap:8px;min-height:42px;padding:6px 0;border-top:1px solid var(--line)}
+.vc-rows span{font:500 9.5px/1.2 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+.vc-rows b{font:500 12.5px/1.3 var(--font-body);overflow-wrap:break-word}
+.copy{padding:7px 10px;border:0;border-radius:999px;cursor:pointer;font:500 11px/1 var(--font-body);color:var(--paper);background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px var(--line)}
+.copy:hover{background:rgba(255,255,255,.14)}
+.vc-qr{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}
+.vc-qr.off{display:none}
+.qr-tile{padding:8px;border-radius:16px;background:var(--paper);line-height:0}
+.qr-tile canvas{width:132px;height:132px;display:block}
+.vc-qr p{margin:0;font:400 12.5px/1.45 var(--font-body);color:rgba(252,250,248,.75)}
+.save.small{min-height:46px;justify-content:center}
+.save[hidden]{display:none}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;top:calc(16px + env(safe-area-inset-top));z-index:30;max-width:calc(100% - 32px);padding:10px 14px;border-radius:999px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 12.5px/1 var(--font-body);color:var(--paper);
+  background:rgba(20,22,28,.72);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 14px 30px -16px rgba(0,0,0,.8);
+  transform:translate(-50%,-24px);opacity:0;transition:transform .45s var(--ease),opacity .3s}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+@media (max-width:480px){
+  .hint{display:none}
+}
+@media (max-width:380px){
+  .corner .sub{display:none}
+  .tile{min-height:58px;font-size:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;transition-delay:0s !important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="logo" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="#17171c"/><g transform="translate(8 8)" fill="none" stroke="#fcfaf8" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></g></symbol>
+    <symbol id="i-contact" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="10.5" r="2.3"/><path d="M5.6 16.5c.6-1.8 1.9-2.8 3.4-2.8s2.8 1 3.4 2.8M15 9.5h3.5M15 13h3.5"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20.5 11.6a8.4 8.4 0 0 1-12.2 7.5L3.5 20.5l1.5-4.6a8.4 8.4 0 1 1 15.5-4.3z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8.6A1.6 1.6 0 0 1 4.6 7h2.6l1.6-2.2h6.4L16.8 7h2.6A1.6 1.6 0 0 1 21 8.6v8.8a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 17.4z"/><circle cx="12" cy="12.8" r="3.4"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.2"/><path d="m3.8 6.8 8.2 6.2 8.2-6.2"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M8.5 7H17v8.5"/></symbol>
+    <symbol id="i-left" viewBox="0 0 24 24"><path d="m14.5 6-6 6 6 6"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="m9.5 6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 19.5h14"/></symbol>
+  </defs>
+</svg>
+
+<canvas id="water" aria-hidden="true"></canvas>
+<div class="fallback" aria-hidden="true"><span>GROWTEKO</span></div>
+<canvas id="links" aria-hidden="true"></canvas>
+
+<div class="hud" aria-hidden="true">
+  <div class="corner tl"><span class="k"><i class="dot"></i>API</span><span class="sub" data-subs="REST · Webhooks|Integraciones|Endpoints seguros">REST · Webhooks</span></div>
+  <div class="corner tr"><span class="k">MCP · Claude<i class="dot"></i></span><span class="sub" data-subs="Agentes de IA|Contexto conectado|Flujos automáticos">Agentes de IA</span></div>
+  <div class="corner bl"><span class="sub" data-subs="Cloud|Gobierno de datos|Infraestructura">Cloud</span><span class="k"><i class="dot"></i>AWS</span></div>
+  <div class="corner br"><span class="sub" data-subs="ERP · SaaS propios|Finanzas|Procesos">ERP · SaaS propios</span><span class="k">SAP<i class="dot"></i></span></div>
+</div>
+
+<main class="stage">
+  <div class="card-wrap" id="cardWrap">
+    <article class="card" id="card" aria-roledescription="carrusel" aria-label="Presentación de Growteko Group">
+      <span class="port tl"></span><span class="port tr"></span><span class="port bl"></span><span class="port br"></span>
+
+      <div class="progress" aria-hidden="true"><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
+
+      <header class="card-head">
+        <svg class="mark" aria-hidden="true"><use href="#logo"/></svg>
+        <div class="brand"><b>Growteko Group</b><span>Consultoría tecnológica · Asunción</span></div>
+      </header>
+
+      <div class="slides" id="slides">
+        <section class="slide s-hero is-active" data-name="Quiénes somos" aria-roledescription="diapositiva" aria-label="1 de 8: Quiénes somos">
+          <div class="hero-top">
+            <p class="eyebrow rise" style="--i:0">Consultoría tecnológica · Paraguay</p>
+            <h1 class="hero-h rise" style="--i:1">Tu equipo vale demasiado para <span class="rot" id="rot"><span class="rot-w">apagar incendios.</span></span></h1>
+            <p class="lede rise" style="--i:2">Estrategias tecnológicas basadas en datos que aumentan la visibilidad, reducen costos y maximizan el retorno de tu inversión.</p>
+          </div>
+          <ul class="pillars rise" style="--i:3">
+            <li><button type="button" data-to="1"><span>01</span>Consultoría SAP y ERP<svg class="ic"><use href="#i-right"/></svg></button></li>
+            <li><button type="button" data-to="2"><span>02</span>Automatización y desarrollo<svg class="ic"><use href="#i-right"/></svg></button></li>
+            <li><button type="button" data-to="3"><span>03</span>Talento y respaldo tecnológico<svg class="ic"><use href="#i-right"/></svg></button></li>
+          </ul>
+          <div class="stats rise" style="--i:4">
+            <div class="stat"><b data-count="10" data-prefix="+">+10</b><span>Años de experiencia</span></div>
+            <div class="stat"><b data-count="7">7</b><span>Sectores</span></div>
+            <div class="stat"><b data-count="13">13</b><span>Servicios</span></div>
+          </div>
+        </section>
+
+        <section class="slide s-svc is-next" data-name="SAP y ERP" aria-roledescription="diapositiva" aria-label="2 de 8: Consultoría SAP y ERP">
+          <span class="numeral" aria-hidden="true">01</span>
+          <p class="eyebrow rise" style="--i:0">Servicio 01 de 03</p>
+          <h2 class="h rise" style="--i:1">Consultoría SAP y ERP</h2>
+          <p class="lede rise" style="--i:2">Implementamos, mejoramos y damos soporte a SAP y a nuestros propios ERP. Toda tu operación en un solo sistema: información confiable, menos planillas y decisiones a tiempo.</p>
+          <ul class="chips rise" style="--i:3"><li>SAP</li><li>ERP y SaaS propios</li><li>Auditorías de sistemas y procesos</li><li>Asesoría en sistemas financieros</li></ul>
+          <a class="more rise" style="--i:4" href="https://www.growtekogroup.com" target="_blank" rel="noopener" data-go="la web">Ver servicios en la web <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </section>
+
+        <section class="slide s-svc is-next" data-name="Automatización" aria-roledescription="diapositiva" aria-label="3 de 8: Automatización y desarrollo">
+          <span class="numeral" aria-hidden="true">02</span>
+          <p class="eyebrow rise" style="--i:0">Servicio 02 de 03</p>
+          <h2 class="h rise" style="--i:1">Automatización y desarrollo</h2>
+          <p class="lede rise" style="--i:2">Detectamos las tareas que tu equipo repite todos los días y hacemos que se resuelvan solas. Software a medida, nube y datos ordenados para operar más rápido.</p>
+          <ul class="chips rise" style="--i:3"><li>Automatización de procesos</li><li>Desarrollo a medida</li><li>Cloud y AWS</li><li>Gobierno de datos</li><li>IA aplicada</li><li>Digitalización</li></ul>
+          <a class="more rise" style="--i:4" href="https://www.growtekogroup.com" target="_blank" rel="noopener" data-go="la web">Ver servicios en la web <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </section>
+
+        <section class="slide s-svc is-next" data-name="Talento TI" aria-roledescription="diapositiva" aria-label="4 de 8: Talento y respaldo tecnológico">
+          <span class="numeral" aria-hidden="true">03</span>
+          <p class="eyebrow rise" style="--i:0">Servicio 03 de 03</p>
+          <h2 class="h rise" style="--i:1">Talento y respaldo tecnológico</h2>
+          <p class="lede rise" style="--i:2">Profesionales de TI que se suman a tu equipo sin procesos de contratación largos. Y capacitamos a tu gente para que domine lo que implementamos.</p>
+          <ul class="chips rise" style="--i:3"><li>Outsourcing de TI</li><li>Capacitación en ERP</li><li>Productos tecnológicos bajo pedido</li></ul>
+          <a class="more rise" style="--i:4" href="https://www.growtekogroup.com/capacitaciones" target="_blank" rel="noopener" data-go="Capacitaciones">Ver capacitaciones <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </section>
+
+        <section class="slide s-sec is-next" data-name="Sectores" aria-roledescription="diapositiva" aria-label="5 de 8: Sectores">
+          <p class="eyebrow rise" style="--i:0">7 sectores</p>
+          <h2 class="h rise" style="--i:1">Sectores que conocemos por dentro</h2>
+          <ul class="sectors">
+            <li class="rise" style="--i:2"><b>Banca y finanzas</b><span>Procesos críticos, sin margen de error</span></li>
+            <li class="rise" style="--i:3"><b>Energía y oil &amp; gas</b><span>Operaciones complejas, bajo control</span></li>
+            <li class="rise" style="--i:4"><b>Supply chain</b><span>Stock y logística siempre a la vista</span></li>
+            <li class="rise" style="--i:5"><b>Construcción</b><span>Obras con costos y avances claros</span></li>
+            <li class="rise" style="--i:6"><b>Arquitectura</b><span>Proyectos, horas y presupuestos en orden</span></li>
+            <li class="rise" style="--i:7"><b>Pymes</b><span>Crecer sin sumar caos</span></li>
+          </ul>
+          <a class="more rise" style="--i:8" href="https://www.growtekogroup.com/sectores" target="_blank" rel="noopener" data-go="Sectores">Ver sectores <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </section>
+
+        <section class="slide s-met is-next" data-name="Método" aria-roledescription="diapositiva" aria-label="6 de 8: Cómo trabajamos">
+          <p class="eyebrow rise" style="--i:0">5 pasos</p>
+          <h2 class="h rise" style="--i:1">Cómo trabajamos</h2>
+          <ol class="steps rise" style="--i:2">
+            <li class="on"><b>Diagnóstico</b><span>Detectamos dónde se pierden tiempo y dinero.</span></li>
+            <li><b>Propuesta</b><span>Qué hacer, en qué orden, con qué plazos y resultados.</span></li>
+            <li><b>Implementación</b><span>Reportes de avance claros, sin sorpresas.</span></li>
+            <li><b>Capacitación</b><span>Tu equipo lo domina desde el primer día.</span></li>
+            <li><b>Acompañamiento</b><span>Soporte, ajustes y mejoras después del lanzamiento.</span></li>
+          </ol>
+        </section>
+
+        <section class="slide s-res is-next" data-name="Resultados" aria-roledescription="diapositiva" aria-label="7 de 8: Resultados">
+          <p class="eyebrow rise" style="--i:0">Clientes</p>
+          <h2 class="h rise" style="--i:1">Resultados que hablan</h2>
+          <figure class="quote rise" style="--i:2"><blockquote>“Los resultados del trabajo son visibles y aportan un gran valor a nuestra empresa.”</blockquote><figcaption><b>NTT DATA</b> · Project Manager</figcaption></figure>
+          <figure class="quote rise" style="--i:3"><blockquote>“Estamos muy contentos con los resultados y con el equipo.”</blockquote><figcaption><b>ENEL</b> · Dirección de proyectos</figcaption></figure>
+          <p class="promise rise" style="--i:4">No te entregamos un sistema y nos vamos. Nos quedamos hasta que tu equipo lo domine.</p>
+        </section>
+
+        <section class="slide s-con is-next" data-name="Contacto" aria-roledescription="diapositiva" aria-label="8 de 8: Contacto">
+          <p class="eyebrow rise" style="--i:0"><i class="sig"></i>Diagnóstico gratuito de 30 minutos</p>
+          <h2 class="h rise" style="--i:1">Hablemos de tu empresa.</h2>
+          <p class="lede rise" style="--i:2">Cuéntanos qué te quita tiempo hoy y te proponemos los próximos pasos.</p>
+          <a class="cta rise" style="--i:3" href="https://wa.me/595974626978?text=Hola%20Growteko%2C%20vi%20su%20tarjeta%20digital%20y%20me%20gustar%C3%ADa%20agendar%20un%20diagn%C3%B3stico." target="_blank" rel="noopener" data-go="WhatsApp">Escribir por WhatsApp <svg class="ic"><use href="#i-arrow"/></svg></a>
+          <ul class="facts rise" style="--i:4">
+            <li><span>WhatsApp</span><b>+595 974 626 978</b></li>
+            <li><span>Correo</span><a href="mailto:contacto@growtekogroup.com?subject=Consulta%20desde%20la%20tarjeta%20digital" data-go="correo" data-copy="contacto@growtekogroup.com">contacto@growtekogroup.com</a></li>
+            <li><span>Base</span><b>Asunción, Paraguay</b></li>
+          </ul>
+        </section>
+      </div>
+
+      <footer class="card-foot">
+        <button class="nav" id="prev" type="button" aria-label="Diapositiva anterior"><svg class="ic"><use href="#i-left"/></svg></button>
+        <div class="where" aria-live="polite"><b id="idx">01</b><span>/ 08</span><span class="nm" id="slideName">Quiénes somos</span></div>
+        <button class="nav" id="next" type="button" aria-label="Diapositiva siguiente"><svg class="ic"><use href="#i-right"/></svg></button>
+      </footer>
+    </article>
+  </div>
+
+  <nav class="dock" aria-label="Contacto">
+    <button class="save" id="save" type="button">
+      <svg class="ic"><use href="#i-contact"/></svg>
+      <span class="t"><span>Guardar contacto</span><small>Se guarda como “Growteko”</small></span>
+      <span class="k">vCard</span>
+    </button>
+    <div class="links">
+      <a class="tile" href="https://wa.me/595974626978?text=Hola%20Growteko%2C%20vi%20su%20tarjeta%20digital%20y%20me%20gustar%C3%ADa%20agendar%20un%20diagn%C3%B3stico." target="_blank" rel="noopener" data-go="WhatsApp"><svg class="ic"><use href="#i-chat"/></svg><span>WhatsApp</span></a>
+      <a class="tile" href="https://www.instagram.com/Growtekogroup/" target="_blank" rel="noopener" data-go="Instagram"><svg class="ic"><use href="#i-camera"/></svg><span>Instagram</span></a>
+      <a class="tile" href="https://x.com/Growteko" target="_blank" rel="noopener" data-go="X"><b class="glyph" aria-hidden="true">X</b><span>Seguir en X</span></a>
+      <a class="tile" href="https://www.growtekogroup.com" target="_blank" rel="noopener" data-go="la web"><svg class="ic"><use href="#i-globe"/></svg><span>Web</span></a>
+      <a class="tile" href="mailto:contacto@growtekogroup.com?subject=Consulta%20desde%20la%20tarjeta%20digital" data-go="correo" data-copy="contacto@growtekogroup.com"><svg class="ic"><use href="#i-mail"/></svg><span>Correo</span></a>
+    </div>
+  </nav>
+  <p class="hint" id="hint">Desliza la tarjeta · toca el agua</p>
+</main>
+
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="sheet-bg" data-close></div>
+  <div class="vcard" role="dialog" aria-modal="true" aria-labelledby="vcTitle">
+    <div class="vc-head">
+      <svg class="mark" aria-hidden="true"><use href="#logo"/></svg>
+      <div><h3 id="vcTitle">Growteko</h3><p>Growteko Group · Consultoría tecnológica</p></div>
+      <button class="nav" type="button" data-close aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+    <p class="vc-status" id="vcStatus">Se guarda como <b>Growteko</b>.</p>
+    <ul class="vc-rows">
+      <li><span>WhatsApp</span><b>+595 974 626 978</b><button class="copy" type="button" data-copytext="+595974626978" data-what="Número">Copiar</button></li>
+      <li><span>Correo</span><b>contacto@growtekogroup.com</b><button class="copy" type="button" data-copytext="contacto@growtekogroup.com" data-what="Correo">Copiar</button></li>
+      <li><span>Web</span><b>growtekogroup.com</b></li>
+      <li><span>Instagram</span><b>@Growtekogroup</b></li>
+      <li><span>X</span><b>@Growteko</b></li>
+      <li><span>Base</span><b>Asunción, Paraguay</b></li>
+    </ul>
+    <div class="vc-qr" id="qrBox">
+      <div class="qr-tile"><canvas id="qr" width="264" height="264" role="img" aria-label="Código QR con el contacto de Growteko"></canvas></div>
+      <p>Escanea el código con la cámara de tu teléfono para guardar a <b>Growteko</b> en tus contactos.</p>
+    </div>
+    <button class="save small" id="again" type="button" hidden><svg class="ic"><use href="#i-down"/></svg><span>Descargar Growteko.vcf</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+"use strict";
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const coarse = matchMedia("(pointer: coarse)").matches;
+const framed = (() => { try { return window.self !== window.top; } catch (e) { return true; } })();
+const PERSP = 1100, RADIUS = 30, D2R = Math.PI / 180;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+/* ---------------- contact data ---------------- */
+const QR_TEXT = "BEGIN:VCARD\nVERSION:3.0\nN:;Growteko;;;\nFN:Growteko\nORG:Growteko Group\nTEL;TYPE=CELL:+595974626978\nEMAIL:contacto@growtekogroup.com\nURL:https://www.growtekogroup.com\nEND:VCARD";
+
+function logoPNG() {
+  try {
+    const s = 192, c = document.createElement("canvas"); c.width = c.height = s;
+    const g = c.getContext("2d");
+    g.fillStyle = "#17171c";
+    const r = 46; g.beginPath(); g.moveTo(r, 0); g.arcTo(s, 0, s, s, r); g.arcTo(s, s, 0, s, r); g.arcTo(0, s, 0, 0, r); g.arcTo(0, 0, s, 0, r); g.closePath(); g.fill();
+    const k = s / 40; g.save(); g.translate(8 * k, 8 * k); g.scale(k, k);
+    g.strokeStyle = "#fcfaf8"; g.lineWidth = 2.3; g.lineCap = "round"; g.lineJoin = "round";
+    g.beginPath(); g.moveTo(22, 7); g.lineTo(13.5, 15.5); g.lineTo(8.5, 10.5); g.lineTo(2, 17); g.stroke();
+    g.beginPath(); g.moveTo(16, 7); g.lineTo(22, 7); g.lineTo(22, 13); g.stroke();
+    g.restore();
+    return c.toDataURL("image/png").split(",")[1];
+  } catch (e) { return ""; }
+}
+function fold(line) {
+  if (line.length <= 75) return line;
+  const out = [line.slice(0, 75)];
+  for (let i = 75; i < line.length; i += 74) out.push(" " + line.slice(i, i + 74));
+  return out.join("\r\n");
+}
+function buildVcf() {
+  const esc = s => s.replace(/\\/g, "\\\\").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\n/g, "\\n");
+  const L = [
+    "BEGIN:VCARD", "VERSION:3.0",
+    "N:;Growteko;;;", "FN:Growteko", "ORG:Growteko Group",
+    "TEL;TYPE=CELL,VOICE,pref:+595974626978",
+    "EMAIL;TYPE=INTERNET,WORK,pref:contacto@growtekogroup.com",
+    "item1.URL:https://www.growtekogroup.com", "item1.X-ABLabel:Web",
+    "item2.URL:https://www.instagram.com/Growtekogroup/", "item2.X-ABLabel:Instagram",
+    "item3.URL:https://x.com/Growteko", "item3.X-ABLabel:X",
+    "item4.URL:https://wa.me/595974626978", "item4.X-ABLabel:WhatsApp",
+    "ADR;TYPE=WORK:;;;Asunción;;;Paraguay",
+    "NOTE:" + esc("Consultoría tecnológica en Paraguay. SAP y ERP, automatización y desarrollo, cloud y AWS, IA aplicada y outsourcing de TI.")
+  ];
+  const photo = logoPNG(); if (photo) L.push(fold("PHOTO;ENCODING=b;TYPE=PNG:" + photo));
+  L.push("END:VCARD");
+  return L.join("\r\n") + "\r\n";
+}
+/* When the page is hosted next to Growteko.vcf, iPhone opens the contact card directly. */
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+let hostedVcf = false;
+if (!framed && location.protocol.startsWith("http")) {
+  fetch("Growteko.vcf", { method: "HEAD", cache: "no-store" }).then(r => { hostedVcf = r.ok; }).catch(() => {});
+}
+function downloadVcf() {
+  if (isIOS && hostedVcf) { location.href = "Growteko.vcf"; return true; }
+  try {
+    const blob = new Blob([buildVcf()], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a"); a.href = url; a.download = "Growteko.vcf";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    return true;
+  } catch (e) { return false; }
+}
+
+/* ---------------- elements ---------------- */
+const wrap = document.getElementById("cardWrap");
+const card = document.getElementById("card");
+const slidesEl = document.getElementById("slides");
+const slides = Array.from(slidesEl.querySelectorAll(".slide"));
+const segs = Array.from(card.querySelectorAll(".progress i"));
+const portEls = Array.from(card.querySelectorAll(".port"));
+const idxEl = document.getElementById("idx"), nameEl = document.getElementById("slideName");
+const toastEl = document.getElementById("toast"), hint = document.getElementById("hint");
+const dots = Array.from(document.querySelectorAll(".corner .dot"));
+
+let toastTimer;
+function toast(msg) { toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2300); }
+function hideHint() { hint.classList.add("gone"); }
+async function copy(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+  try {
+    const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); const ok = document.execCommand("copy"); ta.remove(); return ok;
+  } catch (e) { return false; }
+}
+
+/* ---------------- tilt state ---------------- */
+const tilt = { x: { x: 0, v: 0 }, y: { x: 0, v: 0 }, s: { x: 1, v: 0 } };
+function spring(o, target, dt, k = 90, c = 13) { const a = (target - o.x) * k - o.v * c; o.v += a * dt; o.x += o.v * dt; }
+let mouse = null, lastMouse = -1e9, mouseLocal = null, hovering = false, gyro = null, drag = null, touchTilt = null, pressing = false, sheetOpen = false;
+
+/* ---------------- slides ---------------- */
+let cur = 0, autoT = 0, pauseUntil = 0;
+const AUTO = 7200;
+function setStates() { slides.forEach((s, j) => { const on = j === cur; s.setAttribute("aria-hidden", on ? "false" : "true"); s.inert = !on; }); }
+function meta() {
+  idxEl.textContent = String(cur + 1).padStart(2, "0");
+  nameEl.textContent = slides[cur].dataset.name;
+  segs.forEach((g, j) => { g.style.transform = "scaleX(" + (j < cur ? 1 : 0) + ")"; });
+}
+function go(n, dir, user) {
+  const N = slides.length;
+  n = ((n % N) + N) % N;
+  if (n === cur) return;
+  if (dir === undefined) dir = n > cur ? 1 : -1;
+  const from = slides[cur], to = slides[n];
+  to.classList.add("no-anim");
+  to.classList.remove("is-active", "is-prev", "is-next");
+  to.classList.add(dir > 0 ? "is-next" : "is-prev");
+  void to.offsetWidth;
+  to.classList.remove("no-anim");
+  from.classList.remove("is-active");
+  from.classList.add(dir > 0 ? "is-prev" : "is-next");
+  to.classList.remove("is-prev", "is-next");
+  to.classList.add("is-active");
+  to.scrollTop = 0;
+  cur = n; autoT = 0;
+  if (user) { pauseUntil = performance.now() + 9000; hideHint(); }
+  if (!reduce) tilt.y.v += -dir * 150;
+  packets(1, true);
+  setStates(); meta(); enter(n);
+}
+function enter(n) {
+  const s = slides[n];
+  if (s.classList.contains("s-hero")) countUp(s);
+  if (s.classList.contains("s-met")) { si = 0; paintSteps(); }
+}
+function countUp(root) {
+  if (reduce) return;
+  root.querySelectorAll("[data-count]").forEach(el => {
+    const to = +el.dataset.count, pre = el.dataset.prefix || "", t0 = performance.now(), d = 1150;
+    (function step(now) { const k = Math.min(1, (now - t0) / d), e = 1 - Math.pow(1 - k, 3); el.textContent = pre + Math.round(to * e); if (k < 1) requestAnimationFrame(step); })(t0);
+  });
+}
+document.getElementById("prev").addEventListener("click", () => go(cur - 1, -1, true));
+document.getElementById("next").addEventListener("click", () => go(cur + 1, 1, true));
+document.querySelectorAll("[data-to]").forEach(b => b.addEventListener("click", () => go(+b.dataset.to, 1, true)));
+addEventListener("keydown", e => {
+  if (sheetOpen) { if (e.key === "Escape") closeSheet(); return; }
+  if (e.key === "ArrowRight") go(cur + 1, 1, true);
+  else if (e.key === "ArrowLeft") go(cur - 1, -1, true);
+});
+
+/* rotating hero phrase */
+const rotW = document.querySelector("#rot .rot-w");
+const phrases = ["apagar incendios.", "operaciones manuales.", "decidir a ciegas."]; let pi = 0;
+setInterval(() => {
+  if (document.hidden) return;
+  rotW.classList.add("out");
+  setTimeout(() => {
+    pi = (pi + 1) % phrases.length; rotW.textContent = phrases[pi];
+    rotW.classList.remove("out"); rotW.classList.add("in"); void rotW.offsetWidth; rotW.classList.remove("in");
+  }, reduce ? 0 : 420);
+}, 2900);
+
+/* method steps */
+const steps = Array.from(document.querySelectorAll(".steps li")); let si = 0;
+function paintSteps() { steps.forEach((l, j) => l.classList.toggle("on", j === si)); }
+setInterval(() => { if (!slides[cur].classList.contains("s-met") || reduce) return; si = (si + 1) % steps.length; paintSteps(); }, 1350);
+
+/* corner labels */
+document.querySelectorAll(".corner .sub").forEach((el, i) => {
+  const list = el.dataset.subs.split("|"); let k = 0;
+  setTimeout(function tick() { if (!document.hidden) { k = (k + 1) % list.length; scramble(el, list[k]); } setTimeout(tick, 4400); }, 2600 + i * 950);
+});
+function scramble(el, text) {
+  if (reduce) { el.textContent = text; return; }
+  const glyphs = "01<>/_-:·", start = performance.now(), dur = 540;
+  (function step(now) {
+    const k = Math.min(1, (now - start) / dur), n = Math.floor(text.length * k);
+    let s = text.slice(0, n);
+    for (let j = n; j < text.length; j++) s += text[j] === " " ? " " : glyphs[(Math.random() * glyphs.length) | 0];
+    el.textContent = k < 1 ? s : text;
+    if (k < 1) requestAnimationFrame(step);
+  })(start);
+}
+
+/* ---------------- geometry ---------------- */
+let rect = null, anchors = null, ports = null, Hm = null;
+function measure() {
+  const r = wrap.getBoundingClientRect();
+  rect = { cx: r.left + r.width / 2, cy: r.top + r.height / 2, w: r.width, h: r.height };
+  anchors = dots.map(d => { const b = d.getBoundingClientRect(); return [b.left + b.width / 2, b.top + b.height / 2]; });
+}
+addEventListener("resize", () => { measure(); sizeLinks(); sizeWater(); scheduleText(); });
+addEventListener("scroll", measure, { passive: true });
+if ("ResizeObserver" in window) new ResizeObserver(measure).observe(wrap);
+
+function proj(lx, ly, rx, ry, s) {
+  const a = rx * D2R, b = ry * D2R, x = lx * s, y = ly * s;
+  const x1 = x * Math.cos(b), z1 = -x * Math.sin(b);
+  const y2 = y * Math.cos(a) - z1 * Math.sin(a), z2 = y * Math.sin(a) + z1 * Math.cos(a);
+  const f = PERSP / (PERSP - z2);
+  return [rect.cx + x1 * f, rect.cy + y2 * f];
+}
+function homography(src, dst) {
+  const A = [], B = [];
+  for (let i = 0; i < 4; i++) {
+    const [x, y] = src[i], [u, v] = dst[i];
+    A.push([x, y, 1, 0, 0, 0, -u * x, -u * y]); B.push(u);
+    A.push([0, 0, 0, x, y, 1, -v * x, -v * y]); B.push(v);
+  }
+  for (let c = 0; c < 8; c++) {
+    let p = c; for (let r = c + 1; r < 8; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+    [A[c], A[p]] = [A[p], A[c]]; [B[c], B[p]] = [B[p], B[c]];
+    const d = A[c][c] || 1e-12;
+    for (let r = 0; r < 8; r++) {
+      if (r === c) continue;
+      const f = A[r][c] / d; if (!f) continue;
+      for (let k = c; k < 8; k++) A[r][k] -= f * A[c][k];
+      B[r] -= f * B[c];
+    }
+  }
+  const h = B.map((b, i) => b / A[i][i]);
+  return new Float32Array([h[0], h[3], h[6], h[1], h[4], h[7], h[2], h[5], 1]);
+}
+function computeGeometry(rx, ry, s) {
+  if (!rect) return;
+  const hw = rect.w / 2, hh = rect.h / 2, ins = 14;
+  const Q = [proj(-hw, -hh, rx, ry, s), proj(hw, -hh, rx, ry, s), proj(hw, hh, rx, ry, s), proj(-hw, hh, rx, ry, s)];
+  Hm = homography(Q, [[0, 0], [rect.w, 0], [rect.w, rect.h], [0, rect.h]]);
+  ports = [proj(-hw + ins, -hh + ins, rx, ry, s), proj(hw - ins, -hh + ins, rx, ry, s), proj(-hw + ins, hh - ins, rx, ry, s), proj(hw - ins, hh - ins, rx, ry, s)];
+}
+
+/* ---------------- connection lines ---------------- */
+const lc = document.getElementById("links"), lg = lc.getContext("2d");
+let LDPR = 1;
+function sizeLinks() { LDPR = Math.min(2, devicePixelRatio || 1); lc.width = Math.round(innerWidth * LDPR); lc.height = Math.round(innerHeight * LDPR); }
+const bursts = [];
+function packets(n, outward) {
+  if (reduce) return;
+  const t = (performance.now() - T0) / 1000;
+  for (let i = 0; i < 4; i++) for (let k = 0; k < n; k++) bursts.push({ i, t0: t + k * 0.12 + i * 0.03, dur: 0.9, out: !!outward });
+  portEls.forEach(p => { p.classList.remove("ping"); void p.offsetWidth; p.classList.add("ping"); });
+}
+function bez(A, c1, c2, B, u) {
+  const m = 1 - u;
+  return [m * m * m * A[0] + 3 * m * m * u * c1[0] + 3 * m * u * u * c2[0] + u * u * u * B[0],
+          m * m * m * A[1] + 3 * m * m * u * c1[1] + 3 * m * u * u * c2[1] + u * u * u * B[1]];
+}
+function glow(p, r, a) {
+  const g = lg.createRadialGradient(p[0], p[1], 0, p[0], p[1], r * 4);
+  g.addColorStop(0, "rgba(252,250,248," + a + ")"); g.addColorStop(1, "rgba(252,250,248,0)");
+  lg.fillStyle = g; lg.beginPath(); lg.arc(p[0], p[1], r * 4, 0, Math.PI * 2); lg.fill();
+}
+function drawLinks(t) {
+  lg.setTransform(LDPR, 0, 0, LDPR, 0, 0);
+  lg.clearRect(0, 0, innerWidth, innerHeight);
+  if (!anchors || !ports) return;
+  const paths = [];
+  for (let i = 0; i < 4; i++) {
+    const A = anchors[i], B = ports[i];
+    const c1 = [A[0] + (B[0] - A[0]) * 0.55, A[1]], c2 = [B[0], A[1] + (B[1] - A[1]) * 0.45];
+    paths.push([A, c1, c2, B]);
+    lg.beginPath(); lg.moveTo(A[0], A[1]); lg.bezierCurveTo(c1[0], c1[1], c2[0], c2[1], B[0], B[1]);
+    lg.strokeStyle = "rgba(252,250,248,0.09)"; lg.lineWidth = 1; lg.setLineDash([2, 6]); lg.lineDashOffset = reduce ? 0 : -t * 14; lg.stroke();
+    if (!reduce) {
+      const u = (t * 0.22 + i * 0.25) % 1;
+      glow(bez(A, c1, c2, B, u), 1.6, (0.35 * Math.sin(Math.PI * u)).toFixed(3));
+    }
+  }
+  lg.setLineDash([]);
+  for (let j = bursts.length - 1; j >= 0; j--) {
+    const b = bursts[j], u = (t - b.t0) / b.dur;
+    if (u > 1) { bursts.splice(j, 1); continue; }
+    if (u < 0) continue;
+    const P = paths[b.i], e = 1 - Math.pow(1 - u, 2), uu = b.out ? 1 - e : e;
+    glow(bez(P[0], P[1], P[2], P[3], uu), 2, (0.85 * Math.sin(Math.PI * u)).toFixed(3));
+  }
+}
+
+/* ---------------- water (WebGL) ---------------- */
+const cv = document.getElementById("water");
+let gl = null, U = {}, Q = Math.min(2, devicePixelRatio || 1) * 0.62, tex = null;
+const rip = new Float32Array(32); let ripI = 0;
+for (let i = 0; i < 8; i++) { rip[i * 4 + 2] = -100; }
+function addRipple(x, y, amp) {
+  if (reduce || !gl) return;
+  const t = (performance.now() - T0) / 1000, o = (ripI++ % 8) * 4;
+  rip[o] = x; rip[o + 1] = y; rip[o + 2] = t; rip[o + 3] = amp;
+}
+const VS = "attribute vec2 aPos;varying vec2 vUv;void main(){vUv=aPos*0.5+0.5;gl_Position=vec4(aPos,0.0,1.0);}";
+const FS = `
+precision highp float;
+varying vec2 vUv;
+uniform vec2 uRes; uniform float uT; uniform sampler2D uText;
+uniform vec4 uRip[8]; uniform mat3 uH; uniform vec2 uSize; uniform vec2 uCC;
+uniform float uRad; uniform float uOn; uniform vec2 uTilt;
+#define TAU 6.28318530718
+float caustic(vec2 uv, float time){
+  vec2 p = mod(uv*TAU, TAU) - 250.0; vec2 i = p; float c = 1.0; float inten = 0.005;
+  for (int n = 0; n < 4; n++){
+    float t = time * (1.0 - (3.5 / float(n+1)));
+    i = p + vec2(cos(t - i.x) + sin(t + i.y), sin(t - i.y) + cos(t + i.x));
+    c += 1.0 / length(vec2(p.x / (sin(i.x + t) / inten), p.y / (cos(i.y + t) / inten)));
+  }
+  c /= 4.0; c = 1.17 - pow(c, 1.4);
+  return pow(abs(c), 8.0);
+}
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float sdRR(vec2 p, vec2 b, float r){ vec2 q = abs(p) - b + r; return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r; }
+void main(){
+  vec2 p = vec2(vUv.x * uRes.x, (1.0 - vUv.y) * uRes.y);
+  float t = uT;
+  vec2 k1 = vec2(0.0090, 0.0042), k2 = vec2(-0.0051, 0.0083), k3 = vec2(0.0127, -0.0069);
+  float s1 = dot(p, k1) + t * 0.80, s2 = dot(p, k2) - t * 0.65, s3 = dot(p, k3) + t * 1.10;
+  float h = sin(s1) * 0.5 + sin(s2) * 0.4 + sin(s3) * 0.25;
+  vec2 disp = (k1 * cos(s1) * 0.5 + k2 * cos(s2) * 0.4 + k3 * cos(s3) * 0.25) * 900.0;
+  for (int i = 0; i < 8; i++){
+    vec4 r = uRip[i];
+    float age = t - r.z;
+    if (age < 0.0 || age > 4.5) continue;
+    vec2 d = p - r.xy; float dist = length(d) + 0.001;
+    float x = dist - age * 240.0;
+    float env = exp(-x * x / 3200.0) * exp(-age * 1.1) * r.w;
+    float ph = x * 0.075;
+    h += sin(ph) * env;
+    disp += (d / dist) * cos(ph) * env * 14.0;
+  }
+  float inside = 0.0, rim = 0.0; vec2 sp = p;
+  if (uOn > 0.5){
+    vec3 l = uH * vec3(p, 1.0);
+    vec2 hb = uSize * 0.5;
+    vec2 lp = l.xy / l.z - hb;
+    float d = sdRR(lp, hb, uRad);
+    vec2 n = vec2(sdRR(lp + vec2(1.0, 0.0), hb, uRad) - sdRR(lp - vec2(1.0, 0.0), hb, uRad),
+                  sdRR(lp + vec2(0.0, 1.0), hb, uRad) - sdRR(lp - vec2(0.0, 1.0), hb, uRad));
+    n = n / max(length(n), 1e-4);
+    inside = smoothstep(1.5, -1.5, d);
+    float e = clamp(1.0 + d / 28.0, 0.0, 1.0);
+    rim = e * e * inside;
+    sp = mix(p, uCC + (p - uCC) * 0.955, inside) - n * rim * 22.0;
+    disp *= mix(1.0, 0.45, inside);
+  }
+  sp += disp;
+  vec2 uvT = vec2(sp.x / uRes.x, 1.0 - sp.y / uRes.y);
+  float txt = texture2D(uText, uvT).r;
+  float c = caustic(sp / 560.0, t * 0.32) * 0.65 + caustic(sp / 910.0 + 0.37, t * 0.24 + 11.0) * 0.55;
+  vec2 uv = p / uRes; vec2 q = uv - vec2(0.5, 0.42); q.x *= uRes.x / uRes.y;
+  float vign = 1.0 - smoothstep(0.1, 0.95 * max(uRes.x / uRes.y, 1.0), length(q));
+  vec3 col = mix(vec3(0.024, 0.027, 0.037), vec3(0.066, 0.080, 0.106), vign);
+  float lm = 0.75 + 0.25 * sin(uv.x * 2.0 + uTilt.y * 0.08 + t * 0.1);
+  col += vec3(0.78, 0.85, 0.95) * c * 0.075 * (0.6 + vign) * lm;
+  col += vec3(0.99, 0.98, 0.96) * txt * (0.006 + c * 0.075);
+  col += vec3(0.85, 0.9, 1.0) * h * 0.02;
+  col = mix(col, col * 0.8 + vec3(0.012, 0.013, 0.017), inside * 0.65);
+  col += vec3(0.9, 0.94, 1.0) * rim * (0.03 + c * 0.25);
+  col += (hash(p * 0.5 + fract(t)) - 0.5) * 0.010;
+  gl_FragColor = vec4(col, 1.0);
+}`;
+function initGL() {
+  try { gl = cv.getContext("webgl", { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: "high-performance" }); } catch (e) { gl = null; }
+  if (!gl) return false;
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(s)); return null; } return s; };
+  const vs = sh(gl.VERTEX_SHADER, VS), fs = sh(gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) { gl = null; return false; }
+  const pr = gl.createProgram(); gl.attachShader(pr, vs); gl.attachShader(pr, fs); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { gl = null; return false; }
+  gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, "aPos"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  ["uRes", "uT", "uText", "uRip", "uH", "uSize", "uCC", "uRad", "uOn", "uTilt"].forEach(n => U[n] = gl.getUniformLocation(pr, n));
+  tex = gl.createTexture(); gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+  gl.uniform1i(U.uText, 0);
+  cv.addEventListener("webglcontextlost", e => { e.preventDefault(); gl = null; document.documentElement.classList.add("no-gl"); });
+  return true;
+}
+function sizeWater() {
+  if (!gl) return;
+  cv.width = Math.max(2, Math.round(innerWidth * Q)); cv.height = Math.max(2, Math.round(innerHeight * Q));
+  gl.viewport(0, 0, cv.width, cv.height);
+}
+function buildText() {
+  if (!gl) return;
+  const W = innerWidth, H = innerHeight, sc = Math.min(1, 1500 / Math.max(W, H));
+  const c = document.createElement("canvas"); c.width = Math.max(2, Math.round(W * sc)); c.height = Math.max(2, Math.round(H * sc));
+  const g = c.getContext("2d");
+  g.fillStyle = "#000"; g.fillRect(0, 0, c.width, c.height);
+  g.save(); g.translate(c.width / 2, c.height / 2); g.rotate(-8 * D2R);
+  const fs = Math.max(c.width, c.height * 0.62) / 5.4;
+  g.font = "800 " + fs + "px 'DM Sans', system-ui, sans-serif";
+  if ("letterSpacing" in g) g.letterSpacing = (-fs * 0.045) + "px";
+  if ("filter" in g) g.filter = "blur(" + Math.max(1, fs * 0.012) + "px)";
+  g.textBaseline = "middle"; g.fillStyle = "#fff";
+  const word = "GROWTEKO", ww = g.measureText(word).width, gap = fs * 0.6, step = ww + gap, rowH = fs * 1.18;
+  const diag = Math.hypot(c.width, c.height), rows = Math.ceil(diag / rowH / 2) + 1;
+  for (let r = -rows; r <= rows; r++) {
+    const off = (Math.abs(r) % 2) * step * 0.5;
+    for (let x = -diag / 2 - step + off; x < diag / 2 + step; x += step) g.fillText(word, x, r * rowH);
+  }
+  g.restore();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, c);
+}
+let textTimer; function scheduleText() { clearTimeout(textTimer); textTimer = setTimeout(buildText, 220); }
+function renderWater(t, rx, ry) {
+  if (!gl) return;
+  gl.uniform2f(U.uRes, innerWidth, innerHeight);
+  gl.uniform1f(U.uT, reduce ? 12.0 : t);
+  gl.uniform4fv(U.uRip, rip);
+  gl.uniform2f(U.uTilt, rx, ry);
+  if (Hm && rect) {
+    gl.uniformMatrix3fv(U.uH, false, Hm);
+    gl.uniform2f(U.uSize, rect.w, rect.h); gl.uniform2f(U.uCC, rect.cx, rect.cy);
+    gl.uniform1f(U.uRad, RADIUS); gl.uniform1f(U.uOn, 1);
+  } else gl.uniform1f(U.uOn, 0);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+}
+
+/* ---------------- input ---------------- */
+let lastTrail = 0, lastTrailP = [0, 0];
+addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse" || !rect) return;
+  const nx = clamp((e.clientX - rect.cx) / (rect.w * 0.75), -1.3, 1.3), ny = clamp((e.clientY - rect.cy) / (rect.h * 0.75), -1.3, 1.3);
+  mouse = { x: -ny * 7, y: nx * 9 }; lastMouse = performance.now();
+  mouseLocal = [(e.clientX - (rect.cx - rect.w / 2)) / rect.w * 100, (e.clientY - (rect.cy - rect.h / 2)) / rect.h * 100];
+  const now = performance.now();
+  if (now - lastTrail > 110 && Math.hypot(e.clientX - lastTrailP[0], e.clientY - lastTrailP[1]) > 30) {
+    addRipple(e.clientX, e.clientY, 0.22); lastTrail = now; lastTrailP = [e.clientX, e.clientY];
+  }
+}, { passive: true });
+addEventListener("pointerdown", e => { addRipple(e.clientX, e.clientY, 0.9); }, { passive: true });
+wrap.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hovering = true; });
+wrap.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { hovering = false; mouseLocal = null; } });
+wrap.addEventListener("pointerdown", e => {
+  pressing = true;
+  if (e.target.closest("a,button")) return;
+  drag = { id: e.pointerId, x0: e.clientX, y0: e.clientY, dx: 0, active: false };
+  if (e.pointerType !== "mouse" && rect) {
+    const nx = clamp((e.clientX - rect.cx) / (rect.w / 2), -1, 1), ny = clamp((e.clientY - rect.cy) / (rect.h / 2), -1, 1);
+    touchTilt = { x: -ny * 8, y: nx * 10 };
+  }
+});
+addEventListener("pointermove", e => {
+  if (!drag || e.pointerId !== drag.id) return;
+  drag.dx = e.clientX - drag.x0; const dy = e.clientY - drag.y0;
+  if (!drag.active && Math.abs(drag.dx) > 10 && Math.abs(drag.dx) > Math.abs(dy) * 1.2) {
+    drag.active = true; slidesEl.classList.add("dragging"); hideHint();
+    try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+  }
+  if (drag.active) slidesEl.style.setProperty("--drag", (drag.dx * 0.35).toFixed(1));
+}, { passive: true });
+function endDrag(e) {
+  pressing = false; touchTilt = null;
+  if (!drag || (e && e.pointerId !== drag.id)) return;
+  const d = drag; drag = null;
+  slidesEl.classList.remove("dragging"); slidesEl.style.setProperty("--drag", "0");
+  if (d.active && Math.abs(d.dx) > 50) { const dir = d.dx < 0 ? 1 : -1; go(cur + dir, dir, true); }
+}
+addEventListener("pointerup", endDrag); addEventListener("pointercancel", endDrag);
+
+/* gyroscope (only where the browser allows it) */
+function onOrient(e) { if (e.beta == null || e.gamma == null) return; gyro = { x: clamp((e.beta - 40) / 30, -1, 1) * -7, y: clamp(e.gamma / 30, -1, 1) * 10 }; }
+if (!framed && !reduce && "DeviceOrientationEvent" in window) {
+  if (typeof DeviceOrientationEvent.requestPermission === "function") {
+    addEventListener("pointerdown", function ask() {
+      DeviceOrientationEvent.requestPermission().then(s => { if (s === "granted") addEventListener("deviceorientation", onOrient); }).catch(() => {});
+    }, { once: true });
+  } else addEventListener("deviceorientation", onOrient);
+}
+
+/* ---------------- actions ---------------- */
+function burstAt(el, amp) { const r = el.getBoundingClientRect(); addRipple(r.left + r.width / 2, r.top + r.height / 2, amp); }
+document.querySelectorAll("[data-go]").forEach(a => a.addEventListener("click", () => {
+  burstAt(a, 1.6); packets(1, true); hideHint();
+  a.classList.remove("pop"); void a.offsetWidth; a.classList.add("pop");
+  if (a.dataset.copy) copy(a.dataset.copy).then(ok => toast(ok ? "Correo copiado · " + a.dataset.copy : "Abriendo correo · " + a.dataset.copy));
+  else toast("Abriendo " + a.dataset.go + "…");
+}));
+
+const sheet = document.getElementById("sheet"), statusEl = document.getElementById("vcStatus"), again = document.getElementById("again"), saveBtn = document.getElementById("save");
+let lastFocus = null, qrState = 0;
+function statusText() {
+  if (!framed) return "Descargamos <b>Growteko.vcf</b>. Ábrelo y toca <b>Agregar contacto</b>: se guarda como <b>Growteko</b>.";
+  if (qrState === 3) return "Copia el número o el correo para guardar a <b>Growteko</b> en tus contactos.";
+  if (coarse) return "Copia el número o escríbenos por WhatsApp. Desde otro dispositivo, escanea el código para guardar a <b>Growteko</b>.";
+  return "Escanea el código con la cámara de tu teléfono y toca <b>Agregar contacto</b>. Se guarda como <b>Growteko</b>.";
+}
+function openSheet() {
+  sheetOpen = true; lastFocus = document.activeElement;
+  again.hidden = framed;
+  statusEl.innerHTML = statusText();
+  sheet.classList.add("open"); sheet.setAttribute("aria-hidden", "false");
+  loadQR();
+  setTimeout(() => { const b = sheet.querySelector(".vc-head .nav"); if (b) b.focus({ preventScroll: true }); }, 80);
+}
+function closeSheet() {
+  sheetOpen = false; sheet.classList.remove("open"); sheet.setAttribute("aria-hidden", "true");
+  if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+}
+sheet.querySelectorAll("[data-close]").forEach(el => el.addEventListener("click", closeSheet));
+saveBtn.addEventListener("click", () => {
+  burstAt(saveBtn, 2.0); packets(2, true); hideHint();
+  if (!reduce) tilt.y.v += 320;
+  if (!framed) downloadVcf();
+  openSheet();
+});
+again.addEventListener("click", () => { downloadVcf(); toast("Descargando Growteko.vcf"); });
+sheet.querySelectorAll("[data-copytext]").forEach(b => b.addEventListener("click", () => {
+  copy(b.dataset.copytext).then(ok => { toast(ok ? b.dataset.what + " copiado" : "No se pudo copiar: " + b.dataset.copytext); if (ok) { b.textContent = "Copiado"; setTimeout(() => b.textContent = "Copiar", 1600); } });
+}));
+function loadQR() {
+  if (qrState) return; qrState = 1;
+  const s = document.createElement("script");
+  s.src = "https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js";
+  s.onload = () => { try { drawQR(); qrState = 2; } catch (e) { qrFail(); } };
+  s.onerror = qrFail;
+  document.head.appendChild(s);
+}
+function qrFail() { qrState = 3; document.getElementById("qrBox").classList.add("off"); if (sheetOpen) statusEl.innerHTML = statusText(); }
+function drawQR() {
+  const qr = qrcode(0, "M"); qr.addData(QR_TEXT); qr.make();
+  const n = qr.getModuleCount(), quiet = 1, c = document.getElementById("qr"), size = c.width, g = c.getContext("2d");
+  const cell = size / (n + quiet * 2);
+  g.fillStyle = "#fcfaf8"; g.fillRect(0, 0, size, size);
+  g.fillStyle = "#17171c";
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (qr.isDark(r, k)) g.fillRect(Math.floor((k + quiet) * cell), Math.floor((r + quiet) * cell), Math.ceil(cell) + 1, Math.ceil(cell) + 1);
+}
+
+/* ---------------- main loop ---------------- */
+const T0 = performance.now(); let last = T0, slow = 0;
+function frame(now) {
+  const dtMs = now - last, dt = Math.min(0.033, dtMs / 1000); last = now;
+  const t = (now - T0) / 1000;
+  let tx = 0, ty = 0;
+  if (drag && drag.active) { ty = clamp(drag.dx * 0.09, -22, 22); }
+  else if (touchTilt) { tx = touchTilt.x; ty = touchTilt.y; }
+  else if (gyro) { tx = gyro.x; ty = gyro.y; }
+  else if (mouse && now - lastMouse < 4000) { tx = mouse.x; ty = mouse.y; }
+  else if (!reduce) { tx = Math.sin(t * 0.55) * 3.2; ty = Math.cos(t * 0.42) * 5.5; }
+  spring(tilt.x, tx, dt); spring(tilt.y, ty, dt); spring(tilt.s, sheetOpen ? 0.94 : (pressing ? 0.985 : 1), dt, 140, 16);
+  const rx = tilt.x.x, ry = tilt.y.x, s = tilt.s.x;
+  card.style.transform = "rotateX(" + rx.toFixed(3) + "deg) rotateY(" + ry.toFixed(3) + "deg) scale(" + s.toFixed(4) + ")";
+  const mx = hovering && mouseLocal ? mouseLocal[0] : 50 + ry * 4, my = hovering && mouseLocal ? mouseLocal[1] : 22 - rx * 5;
+  card.style.setProperty("--mx", mx.toFixed(1) + "%"); card.style.setProperty("--my", my.toFixed(1) + "%");
+  card.style.setProperty("--la", (210 + ry * 7 - rx * 4).toFixed(1) + "deg");
+  card.style.setProperty("--px", ry.toFixed(2)); card.style.setProperty("--py", rx.toFixed(2));
+
+  if (!reduce && !hovering && !sheetOpen && !(drag && drag.active) && now > pauseUntil && !document.hidden) {
+    autoT += dt * 1000; if (autoT >= AUTO) go(cur + 1, 1);
+  }
+  if (segs[cur]) segs[cur].style.transform = "scaleX(" + Math.min(1, autoT / AUTO).toFixed(4) + ")";
+
+  computeGeometry(rx, ry, s);
+  drawLinks(t);
+  renderWater(t, rx, ry);
+
+  if (gl) {
+    if (dtMs > 30) slow++; else slow = Math.max(0, slow - 1);
+    if (slow > 50 && Q > 0.42) { Q *= 0.8; sizeWater(); slow = 0; }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------------- boot ---------------- */
+if (!initGL()) document.documentElement.classList.add("no-gl");
+setStates(); meta(); measure(); sizeLinks(); sizeWater(); buildText();
+if (document.fonts && document.fonts.load) {
+  document.fonts.load("800 100px 'DM Sans'").then(() => { buildText(); measure(); }).catch(() => {});
+  document.fonts.ready.then(measure);
+}
+setTimeout(() => countUp(slides[0]), 300);
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
